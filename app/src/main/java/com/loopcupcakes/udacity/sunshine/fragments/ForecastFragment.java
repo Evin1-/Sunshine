@@ -24,6 +24,13 @@ public class ForecastFragment extends Fragment {
     private static final String TAG = "MainFragmentTAG_";
 
     public ForecastFragment() {
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -44,8 +51,6 @@ public class ForecastFragment extends Fragment {
 
         listView.setAdapter(arrayAdapter);
 
-        setHasOptionsMenu(true);
-
         return rootView;
     }
 
@@ -57,7 +62,6 @@ public class ForecastFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_main, menu);
     }
 
@@ -67,6 +71,12 @@ public class ForecastFragment extends Fragment {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_refresh) {
+            new FetchWeatherTask().execute();
+            return true;
+        }
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
