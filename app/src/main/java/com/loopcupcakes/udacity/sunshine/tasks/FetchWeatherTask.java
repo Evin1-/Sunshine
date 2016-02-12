@@ -6,8 +6,8 @@ import android.util.Log;
 import com.loopcupcakes.udacity.sunshine.entities.Forecast;
 import com.loopcupcakes.udacity.sunshine.entities.Result;
 import com.loopcupcakes.udacity.sunshine.network.Weather;
-import com.loopcupcakes.udacity.sunshine.network.utils.Constants;
-import com.loopcupcakes.udacity.sunshine.network.utils.Keys;
+import com.loopcupcakes.udacity.sunshine.utils.Constants;
+import com.loopcupcakes.udacity.sunshine.utils.Keys;
 
 import java.io.IOException;
 import java.util.ArrayList;

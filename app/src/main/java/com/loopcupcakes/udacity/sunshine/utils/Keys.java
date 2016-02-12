@@ -1,4 +1,4 @@
-package com.loopcupcakes.udacity.sunshine.network.utils;
+package com.loopcupcakes.udacity.sunshine.utils;
 
 /**
  * Created by evin on 2/12/16.
