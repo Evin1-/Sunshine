@@ -15,6 +15,7 @@ import com.loopcupcakes.udacity.sunshine.R;
 import com.loopcupcakes.udacity.sunshine.tasks.FetchWeatherTask;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 public class ForecastFragment extends Fragment {
 
     private static final String TAG = "MainFragmentTAG_";
+    private ArrayAdapter<String> mArrayAdapter;
+    private ArrayList<String> mArrayList;
 
     public ForecastFragment() {
 
@@ -38,18 +41,18 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ArrayList<String> arrayList = new ArrayList<>();
+        mArrayList = new ArrayList<>();
 
-        arrayList.add("Today - Sunny - 88/34");
-        arrayList.add("Tomorrow - Sunny - 88/34");
-        arrayList.add("Friday - Sunny - 88/34");
-        arrayList.add("Saturday - Sunny - 88/34");
+        mArrayList.add("Today - Sunny - 88/34");
+        mArrayList.add("Tomorrow - Sunny - 88/34");
+        mArrayList.add("Friday - Sunny - 88/34");
+        mArrayList.add("Saturday - Sunny - 88/34");
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_text, arrayList);
+        mArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_text, mArrayList);
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
 
-        listView.setAdapter(arrayAdapter);
+        listView.setAdapter(mArrayAdapter);
 
         return rootView;
     }
@@ -57,7 +60,7 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new FetchWeatherTask().execute(30339);
+//        new FetchWeatherTask(this).execute(30339);
     }
 
     @Override
@@ -74,7 +77,7 @@ public class ForecastFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            new FetchWeatherTask().execute(30339);
+            new FetchWeatherTask(this).execute(30339);
             return true;
         }
 
@@ -84,5 +87,13 @@ public class ForecastFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void refreshAdapter(String[] resultArray){
+        if (mArrayList != null && mArrayAdapter != null){
+            mArrayList.clear();
+            mArrayList.addAll(new ArrayList<String>(Arrays.asList(resultArray)));
+            mArrayAdapter.notifyDataSetChanged();
+        }
     }
 }

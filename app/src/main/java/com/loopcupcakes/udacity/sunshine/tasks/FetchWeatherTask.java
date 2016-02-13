@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.loopcupcakes.udacity.sunshine.entities.Forecast;
 import com.loopcupcakes.udacity.sunshine.entities.Result;
+import com.loopcupcakes.udacity.sunshine.fragments.ForecastFragment;
 import com.loopcupcakes.udacity.sunshine.network.RetrofitHelper;
 
 import java.text.DateFormat;
@@ -19,6 +20,12 @@ import java.util.Locale;
 public class FetchWeatherTask extends AsyncTask<Integer, Void, String[]> {
 
     private static final String TAG = "FetchWeatherTaskTAG_";
+
+    private ForecastFragment mForecastFragment;
+
+    public FetchWeatherTask(ForecastFragment forecastFragment) {
+        mForecastFragment = forecastFragment;
+    }
 
     @Override
     protected String[] doInBackground(Integer... params) {
@@ -73,13 +80,10 @@ public class FetchWeatherTask extends AsyncTask<Integer, Void, String[]> {
     protected void onPostExecute(String[] forecastArray) {
         super.onPostExecute(forecastArray);
 
-        if (forecastArray == null) {
+        if (forecastArray == null || mForecastFragment == null) {
             return;
         }
 
-        for (String forecast : forecastArray) {
-            Log.d(TAG, "onResponse: " + forecast);
-        }
-
+        mForecastFragment.refreshAdapter(forecastArray);
     }
 }
