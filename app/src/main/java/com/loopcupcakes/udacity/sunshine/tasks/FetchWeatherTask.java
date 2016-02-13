@@ -20,12 +20,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by evin on 2/12/16.
  */
-public class FetchWeatherTask extends AsyncTask<Void, Void, List<Forecast>> {
+public class FetchWeatherTask extends AsyncTask<Integer, Void, List<Forecast>> {
 
     private static final String TAG = "FetchWeatherTaskTAG_";
 
     @Override
-    protected List<Forecast> doInBackground(Void... params) {
+    protected List<Forecast> doInBackground(Integer... params) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.WEATHER_BASE_URL)
@@ -34,7 +34,9 @@ public class FetchWeatherTask extends AsyncTask<Void, Void, List<Forecast>> {
 
         Weather weather = retrofit.create(Weather.class);
 
-        Call<Result> call = weather.forecast(30339, "metric", 7, Keys.WEATHER_API_KEY);
+        int postCode = (params != null && params.length > 0) ? params[0] : 30339;
+
+        Call<Result> call = weather.forecast(postCode, "metric", 7, Keys.WEATHER_API_KEY);
 
         Result result = null;
         try {

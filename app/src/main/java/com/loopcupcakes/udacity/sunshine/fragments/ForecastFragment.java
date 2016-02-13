@@ -57,7 +57,7 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new FetchWeatherTask().execute();
+        new FetchWeatherTask().execute(30339);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ForecastFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            new FetchWeatherTask().execute();
+            new FetchWeatherTask().execute(30339);
             return true;
         }
 
