@@ -1,12 +1,16 @@
 
 package com.loopcupcakes.udacity.sunshine.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Result {
+public class Result implements Parcelable {
 
     @SerializedName("city")
     @Expose
@@ -22,10 +26,10 @@ public class Result {
     private Integer cnt;
     @SerializedName("list")
     @Expose
-    private java.util.List<Forecast> forecast = new ArrayList<Forecast>();
+    private List<Forecast> forecast = new ArrayList<Forecast>();
 
     /**
-     * 
+     *
      * @return
      *     The city
      */
@@ -34,7 +38,7 @@ public class Result {
     }
 
     /**
-     * 
+     *
      * @param city
      *     The city
      */
@@ -43,7 +47,7 @@ public class Result {
     }
 
     /**
-     * 
+     *
      * @return
      *     The cod
      */
@@ -52,7 +56,7 @@ public class Result {
     }
 
     /**
-     * 
+     *
      * @param cod
      *     The cod
      */
@@ -61,7 +65,7 @@ public class Result {
     }
 
     /**
-     * 
+     *
      * @return
      *     The message
      */
@@ -70,7 +74,7 @@ public class Result {
     }
 
     /**
-     * 
+     *
      * @param message
      *     The message
      */
@@ -79,7 +83,7 @@ public class Result {
     }
 
     /**
-     * 
+     *
      * @return
      *     The cnt
      */
@@ -88,7 +92,7 @@ public class Result {
     }
 
     /**
-     * 
+     *
      * @param cnt
      *     The cnt
      */
@@ -97,7 +101,7 @@ public class Result {
     }
 
     /**
-     * 
+     *
      * @return
      *     The forecast
      */
@@ -106,7 +110,7 @@ public class Result {
     }
 
     /**
-     * 
+     *
      * @param forecast
      *     The forecast
      */
@@ -114,4 +118,59 @@ public class Result {
         this.forecast = forecast;
     }
 
+
+    protected Result(Parcel in) {
+        city = (City) in.readValue(City.class.getClassLoader());
+        cod = in.readString();
+        message = in.readByte() == 0x00 ? null : in.readDouble();
+        cnt = in.readByte() == 0x00 ? null : in.readInt();
+        if (in.readByte() == 0x01) {
+            forecast = new ArrayList<Forecast>();
+            in.readList(forecast, Forecast.class.getClassLoader());
+        } else {
+            forecast = null;
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(city);
+        dest.writeString(cod);
+        if (message == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(message);
+        }
+        if (cnt == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(cnt);
+        }
+        if (forecast == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(forecast);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Result> CREATOR = new Parcelable.Creator<Result>() {
+        @Override
+        public Result createFromParcel(Parcel in) {
+            return new Result(in);
+        }
+
+        @Override
+        public Result[] newArray(int size) {
+            return new Result[size];
+        }
+    };
 }

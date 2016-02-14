@@ -1,10 +1,13 @@
 
 package com.loopcupcakes.udacity.sunshine.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Weather {
+public class Weather implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -20,7 +23,7 @@ public class Weather {
     private String icon;
 
     /**
-     * 
+     *
      * @return
      *     The id
      */
@@ -29,7 +32,7 @@ public class Weather {
     }
 
     /**
-     * 
+     *
      * @param id
      *     The id
      */
@@ -38,7 +41,7 @@ public class Weather {
     }
 
     /**
-     * 
+     *
      * @return
      *     The main
      */
@@ -47,7 +50,7 @@ public class Weather {
     }
 
     /**
-     * 
+     *
      * @param main
      *     The main
      */
@@ -56,7 +59,7 @@ public class Weather {
     }
 
     /**
-     * 
+     *
      * @return
      *     The description
      */
@@ -65,7 +68,7 @@ public class Weather {
     }
 
     /**
-     * 
+     *
      * @param description
      *     The description
      */
@@ -74,7 +77,7 @@ public class Weather {
     }
 
     /**
-     * 
+     *
      * @return
      *     The icon
      */
@@ -83,7 +86,7 @@ public class Weather {
     }
 
     /**
-     * 
+     *
      * @param icon
      *     The icon
      */
@@ -91,4 +94,42 @@ public class Weather {
         this.icon = icon;
     }
 
+
+    protected Weather(Parcel in) {
+        id = in.readByte() == 0x00 ? null : in.readInt();
+        main = in.readString();
+        description = in.readString();
+        icon = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(id);
+        }
+        dest.writeString(main);
+        dest.writeString(description);
+        dest.writeString(icon);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Weather> CREATOR = new Parcelable.Creator<Weather>() {
+        @Override
+        public Weather createFromParcel(Parcel in) {
+            return new Weather(in);
+        }
+
+        @Override
+        public Weather[] newArray(int size) {
+            return new Weather[size];
+        }
+    };
 }

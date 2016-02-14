@@ -1,10 +1,13 @@
 
 package com.loopcupcakes.udacity.sunshine.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Temp {
+public class Temp implements Parcelable {
 
     @SerializedName("day")
     @Expose
@@ -26,7 +29,7 @@ public class Temp {
     private Double morn;
 
     /**
-     * 
+     *
      * @return
      *     The day
      */
@@ -35,7 +38,7 @@ public class Temp {
     }
 
     /**
-     * 
+     *
      * @param day
      *     The day
      */
@@ -44,7 +47,7 @@ public class Temp {
     }
 
     /**
-     * 
+     *
      * @return
      *     The min
      */
@@ -53,7 +56,7 @@ public class Temp {
     }
 
     /**
-     * 
+     *
      * @param min
      *     The min
      */
@@ -62,7 +65,7 @@ public class Temp {
     }
 
     /**
-     * 
+     *
      * @return
      *     The max
      */
@@ -71,7 +74,7 @@ public class Temp {
     }
 
     /**
-     * 
+     *
      * @param max
      *     The max
      */
@@ -80,7 +83,7 @@ public class Temp {
     }
 
     /**
-     * 
+     *
      * @return
      *     The night
      */
@@ -89,7 +92,7 @@ public class Temp {
     }
 
     /**
-     * 
+     *
      * @param night
      *     The night
      */
@@ -98,7 +101,7 @@ public class Temp {
     }
 
     /**
-     * 
+     *
      * @return
      *     The eve
      */
@@ -107,7 +110,7 @@ public class Temp {
     }
 
     /**
-     * 
+     *
      * @param eve
      *     The eve
      */
@@ -116,7 +119,7 @@ public class Temp {
     }
 
     /**
-     * 
+     *
      * @return
      *     The morn
      */
@@ -125,7 +128,7 @@ public class Temp {
     }
 
     /**
-     * 
+     *
      * @param morn
      *     The morn
      */
@@ -133,4 +136,71 @@ public class Temp {
         this.morn = morn;
     }
 
+
+    protected Temp(Parcel in) {
+        day = in.readByte() == 0x00 ? null : in.readDouble();
+        min = in.readByte() == 0x00 ? null : in.readDouble();
+        max = in.readByte() == 0x00 ? null : in.readDouble();
+        night = in.readByte() == 0x00 ? null : in.readDouble();
+        eve = in.readByte() == 0x00 ? null : in.readDouble();
+        morn = in.readByte() == 0x00 ? null : in.readDouble();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (day == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(day);
+        }
+        if (min == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(min);
+        }
+        if (max == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(max);
+        }
+        if (night == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(night);
+        }
+        if (eve == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(eve);
+        }
+        if (morn == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(morn);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Temp> CREATOR = new Parcelable.Creator<Temp>() {
+        @Override
+        public Temp createFromParcel(Parcel in) {
+            return new Temp(in);
+        }
+
+        @Override
+        public Temp[] newArray(int size) {
+            return new Temp[size];
+        }
+    };
 }

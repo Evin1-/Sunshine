@@ -1,12 +1,16 @@
 
 package com.loopcupcakes.udacity.sunshine.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Forecast {
+public class Forecast implements Parcelable {
 
     @SerializedName("dt")
     @Expose
@@ -22,7 +26,7 @@ public class Forecast {
     private Integer humidity;
     @SerializedName("weather")
     @Expose
-    private java.util.List<Weather> weather = new ArrayList<Weather>();
+    private List<Weather> weather = new ArrayList<Weather>();
     @SerializedName("speed")
     @Expose
     private Double speed;
@@ -40,7 +44,7 @@ public class Forecast {
     private Double rain;
 
     /**
-     * 
+     *
      * @return
      *     The dt
      */
@@ -49,7 +53,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @param dt
      *     The dt
      */
@@ -58,7 +62,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @return
      *     The temp
      */
@@ -67,7 +71,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @param temp
      *     The temp
      */
@@ -76,7 +80,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @return
      *     The pressure
      */
@@ -85,7 +89,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @param pressure
      *     The pressure
      */
@@ -94,7 +98,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @return
      *     The humidity
      */
@@ -103,7 +107,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @param humidity
      *     The humidity
      */
@@ -112,7 +116,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @return
      *     The weather
      */
@@ -121,7 +125,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @param weather
      *     The weather
      */
@@ -130,7 +134,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @return
      *     The speed
      */
@@ -139,7 +143,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @param speed
      *     The speed
      */
@@ -148,7 +152,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @return
      *     The deg
      */
@@ -157,7 +161,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @param deg
      *     The deg
      */
@@ -166,7 +170,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @return
      *     The clouds
      */
@@ -175,7 +179,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @param clouds
      *     The clouds
      */
@@ -184,7 +188,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @return
      *     The snow
      */
@@ -193,7 +197,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @param snow
      *     The snow
      */
@@ -202,7 +206,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @return
      *     The rain
      */
@@ -211,7 +215,7 @@ public class Forecast {
     }
 
     /**
-     * 
+     *
      * @param rain
      *     The rain
      */
@@ -219,4 +223,99 @@ public class Forecast {
         this.rain = rain;
     }
 
+
+    protected Forecast(Parcel in) {
+        dt = in.readByte() == 0x00 ? null : in.readInt();
+        temp = (Temp) in.readValue(Temp.class.getClassLoader());
+        pressure = in.readByte() == 0x00 ? null : in.readDouble();
+        humidity = in.readByte() == 0x00 ? null : in.readInt();
+        if (in.readByte() == 0x01) {
+            weather = new ArrayList<Weather>();
+            in.readList(weather, Weather.class.getClassLoader());
+        } else {
+            weather = null;
+        }
+        speed = in.readByte() == 0x00 ? null : in.readDouble();
+        deg = in.readByte() == 0x00 ? null : in.readInt();
+        clouds = in.readByte() == 0x00 ? null : in.readInt();
+        snow = in.readByte() == 0x00 ? null : in.readDouble();
+        rain = in.readByte() == 0x00 ? null : in.readDouble();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (dt == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(dt);
+        }
+        dest.writeValue(temp);
+        if (pressure == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(pressure);
+        }
+        if (humidity == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(humidity);
+        }
+        if (weather == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(weather);
+        }
+        if (speed == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(speed);
+        }
+        if (deg == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(deg);
+        }
+        if (clouds == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(clouds);
+        }
+        if (snow == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(snow);
+        }
+        if (rain == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(rain);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Forecast> CREATOR = new Parcelable.Creator<Forecast>() {
+        @Override
+        public Forecast createFromParcel(Parcel in) {
+            return new Forecast(in);
+        }
+
+        @Override
+        public Forecast[] newArray(int size) {
+            return new Forecast[size];
+        }
+    };
 }
