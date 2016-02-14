@@ -1,7 +1,6 @@
 package com.loopcupcakes.udacity.sunshine.tasks;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.loopcupcakes.udacity.sunshine.entities.Forecast;
 import com.loopcupcakes.udacity.sunshine.entities.Result;
