@@ -1,5 +1,6 @@
 package com.loopcupcakes.udacity.sunshine.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.loopcupcakes.udacity.sunshine.DetailsActivity;
 import com.loopcupcakes.udacity.sunshine.R;
 import com.loopcupcakes.udacity.sunshine.tasks.FetchWeatherTask;
 
@@ -60,7 +62,9 @@ public class ForecastFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String forecast = mArrayAdapter.getItem(position);
-                Toast.makeText(parent.getContext(), forecast, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(parent.getContext(), forecast, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), DetailsActivity.class);
+                startActivity(intent);
             }
         });
 
