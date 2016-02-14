@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.loopcupcakes.udacity.sunshine.DetailsActivity;
 import com.loopcupcakes.udacity.sunshine.R;
 import com.loopcupcakes.udacity.sunshine.tasks.FetchWeatherTask;
+import com.loopcupcakes.udacity.sunshine.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,8 +63,8 @@ public class ForecastFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String forecast = mArrayAdapter.getItem(position);
-//                Toast.makeText(parent.getContext(), forecast, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), DetailsActivity.class);
+                intent.putExtra(Constants.FORECAST_BUNDLE_KEY, forecast);
                 startActivity(intent);
             }
         });
@@ -74,7 +75,6 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        new FetchWeatherTask(this).execute(30339);
     }
 
     @Override

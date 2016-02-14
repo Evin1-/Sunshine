@@ -6,4 +6,6 @@ package com.loopcupcakes.udacity.sunshine.utils;
 public class Constants {
 
     public static final String WEATHER_BASE_URL = "http://api.openweathermap.org/";
+    public static final String FORECAST_BUNDLE_KEY = "forecast_bundle_key";
+    public static final String DETAILS_FRAGMENT_TAG = "details_fragment_tag";
 }

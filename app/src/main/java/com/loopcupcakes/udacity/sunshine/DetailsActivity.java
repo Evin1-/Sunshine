@@ -6,6 +6,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.FrameLayout;
+
+import com.loopcupcakes.udacity.sunshine.fragments.DetailsFragment;
+import com.loopcupcakes.udacity.sunshine.utils.Constants;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -25,6 +29,11 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        String forecast = getIntent().getStringExtra(Constants.FORECAST_BUNDLE_KEY);
+        DetailsFragment detailsFragment = DetailsFragment.newInstance(forecast);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.a_details_frame, detailsFragment, Constants.DETAILS_FRAGMENT_TAG).commit();
     }
 
 }
