@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.loopcupcakes.udacity.sunshine.DetailsActivity;
 import com.loopcupcakes.udacity.sunshine.R;
+import com.loopcupcakes.udacity.sunshine.SettingsActivity;
 import com.loopcupcakes.udacity.sunshine.tasks.FetchWeatherTask;
 import com.loopcupcakes.udacity.sunshine.utils.Constants;
 
@@ -97,6 +98,8 @@ public class ForecastFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(getContext(), SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
