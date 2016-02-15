@@ -2,6 +2,7 @@ package com.loopcupcakes.udacity.sunshine.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -76,8 +77,7 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        final String[] mainSettings = SharedPreferencesMagic.getMainSettings(sharedPreferences, getContext());
-        new FetchWeatherTask(this).execute(mainSettings);
+        refreshWeather(sharedPreferences);
     }
 
     @Override
@@ -89,8 +89,7 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
     public void onStart() {
         super.onStart();
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        final String[] preferenceOptions = SharedPreferencesMagic.getMainSettings(sharedPreferences, getContext());
-        new FetchWeatherTask(this).execute(preferenceOptions);
+        refreshWeather(sharedPreferences);
     }
 
     @Override
@@ -102,15 +101,17 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_map) {
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            String locationQuery = sharedPreferences.getString(Constants.LOCATION_KEY, getString(R.string.pref_default_location));
+            showMap(Uri.parse("geo:0,0?q=" + locationQuery));
+        }
         if (id == R.id.action_refresh) {
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-            final String[] preferenceOptions = SharedPreferencesMagic.getMainSettings(sharedPreferences, getContext());
-            new FetchWeatherTask(this).execute(preferenceOptions);
+            refreshWeather(sharedPreferences);
             return true;
         }
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(getContext(), SettingsActivity.class);
             startActivity(intent);
@@ -118,6 +119,21 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void refreshWeather(SharedPreferences sharedPreferences) {
+        final String[] preferenceOptions = SharedPreferencesMagic.getMainSettings(sharedPreferences, getContext());
+        new FetchWeatherTask(this).execute(preferenceOptions);
+    }
+
+    public void showMap(Uri geoLocation) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(geoLocation);
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(intent);
+        }else {
+            Log.d(TAG, "showMap: ");
+        }
     }
 
     public void refreshAdapter(String[] resultArray){
