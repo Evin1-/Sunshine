@@ -23,7 +23,8 @@ import com.loopcupcakes.udacity.sunshine.utils.Constants;
 public class DetailsFragment extends Fragment {
 
     private static final String TAG = "DetailsFragmentTAG_";
-    ShareActionProvider mShareActionProvider;
+    private ShareActionProvider mShareActionProvider;
+    private String mForecastString;
 
     public static DetailsFragment newInstance(String forecast) {
 
@@ -53,11 +54,7 @@ public class DetailsFragment extends Fragment {
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
 
         if (mShareActionProvider != null){
-            Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_TEXT, getArguments().getString(Constants.FORECAST_BUNDLE_KEY) + " #SunshineApp");
-            shareIntent.setType("text/plain");
-            mShareActionProvider.setShareIntent(shareIntent);
+            mShareActionProvider.setShareIntent(buildShareIntent());
         }
     }
 
@@ -83,9 +80,18 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String forecast = getArguments().getString(Constants.FORECAST_BUNDLE_KEY);
+        mForecastString = getArguments().getString(Constants.FORECAST_BUNDLE_KEY);
 
         TextView textView = (TextView) view.findViewById(R.id.f_details_main_txt);
-        textView.setText(forecast);
+        textView.setText(mForecastString);
+    }
+
+    private Intent buildShareIntent() {
+        Intent shareIntent = new Intent();
+        shareIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, mForecastString + " #SunshineApp");
+        shareIntent.setType("text/plain");
+        return shareIntent;
     }
 }
