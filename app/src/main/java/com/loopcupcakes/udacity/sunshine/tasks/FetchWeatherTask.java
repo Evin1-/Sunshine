@@ -6,6 +6,7 @@ import com.loopcupcakes.udacity.sunshine.entities.Forecast;
 import com.loopcupcakes.udacity.sunshine.entities.Result;
 import com.loopcupcakes.udacity.sunshine.fragments.ForecastFragment;
 import com.loopcupcakes.udacity.sunshine.network.RetrofitHelper;
+import com.loopcupcakes.udacity.sunshine.utils.Constants;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,7 +17,7 @@ import java.util.Locale;
 /**
  * Created by evin on 2/12/16.
  */
-public class FetchWeatherTask extends AsyncTask<Integer, Void, String[]> {
+public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
     private static final String TAG = "FetchWeatherTaskTAG_";
 
@@ -27,18 +28,23 @@ public class FetchWeatherTask extends AsyncTask<Integer, Void, String[]> {
     }
 
     @Override
-    protected String[] doInBackground(Integer... params) {
+    protected String[] doInBackground(String... params) {
 
-        int postCode = (params != null && params.length > 0) ? params[0] : 30339;
+        String postCode = (params != null && params.length > 0) ? params[0] : Constants.POST_CODE_DEFAULT;
+        String typeMeasurement = (params != null && params.length > 1) ? params[1] : Constants.TYPE_MEASUREMENT_DEFAULT;
 
         RetrofitHelper retrofitHelper = new RetrofitHelper();
 
-        Result result = retrofitHelper.getForecast(postCode);
+        Result result = retrofitHelper.getForecast(postCode, typeMeasurement);
 
         return resultToString(result);
     }
 
     private String[] resultToString(Result result) {
+
+        if (result == null){
+            return null;
+        }
 
         final List<Forecast> forecastList = result.getForecast();
         if (forecastList == null) {

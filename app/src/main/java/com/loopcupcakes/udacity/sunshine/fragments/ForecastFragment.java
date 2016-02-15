@@ -1,8 +1,11 @@
 package com.loopcupcakes.udacity.sunshine.fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +21,7 @@ import com.loopcupcakes.udacity.sunshine.R;
 import com.loopcupcakes.udacity.sunshine.SettingsActivity;
 import com.loopcupcakes.udacity.sunshine.tasks.FetchWeatherTask;
 import com.loopcupcakes.udacity.sunshine.utils.Constants;
+import com.loopcupcakes.udacity.sunshine.utils.SharedPreferencesMagic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +29,7 @@ import java.util.Arrays;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ForecastFragment extends Fragment {
+public class ForecastFragment extends Fragment{
 
     private static final String TAG = "MainFragmentTAG_";
     private ArrayAdapter<String> mArrayAdapter;
@@ -39,6 +43,8 @@ public class ForecastFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mArrayList = new ArrayList<>();
+        mArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_text, mArrayList);
     }
 
     @Override
@@ -46,14 +52,7 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mArrayList = new ArrayList<>();
-
-        mArrayList.add("Today - Sunny - 88/34");
-        mArrayList.add("Tomorrow - Sunny - 88/34");
-        mArrayList.add("Friday - Sunny - 88/34");
-        mArrayList.add("Saturday - Sunny - 88/34");
-
-        mArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_text, mArrayList);
+        Log.d(TAG, "onCreateView: " + savedInstanceState);
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
 
@@ -75,6 +74,10 @@ public class ForecastFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final String[] preferenceOptions = SharedPreferencesMagic.getMainSettings(sharedPreferences);
+        new FetchWeatherTask(this).execute(preferenceOptions);
     }
 
     @Override
@@ -84,14 +87,13 @@ public class ForecastFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            new FetchWeatherTask(this).execute(30339);
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            final String[] preferenceOptions = SharedPreferencesMagic.getMainSettings(sharedPreferences);
+            new FetchWeatherTask(this).execute(preferenceOptions);
             return true;
         }
 

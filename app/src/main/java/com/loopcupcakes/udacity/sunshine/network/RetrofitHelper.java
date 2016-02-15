@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitHelper {
     private static final String TAG = "RetrofitHelperTAG_";
 
-    public Result getForecast(int postCode) {
+    public Result getForecast(String postCode, String typeMeasurement) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.WEATHER_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -27,12 +27,12 @@ public class RetrofitHelper {
         Weather weather = retrofit.create(Weather.class);
 
 
-        Call<Result> call = weather.forecast(postCode, "metric", 7, Keys.WEATHER_API_KEY);
+        Call<Result> call = weather.forecast(postCode, typeMeasurement, 7, Keys.WEATHER_API_KEY);
 
         Result result = null;
         try {
             result = call.execute().body();
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e(TAG, "getForecast: ");
         }
         return result;
