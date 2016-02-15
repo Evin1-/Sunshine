@@ -54,8 +54,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onCreate(savedInstanceState);
         setupActionBar();
         addPreferencesFromResource(R.xml.pref_general);
-        bindPreferenceSummaryToValue(findPreference("settings_location_entry"));
-        bindPreferenceSummaryToValue(findPreference("settings_type_list"));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_type_key)));
     }
 
     private void setupActionBar() {
