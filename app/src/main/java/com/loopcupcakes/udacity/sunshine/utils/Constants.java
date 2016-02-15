@@ -11,7 +11,4 @@ public class Constants {
     public static final String DETAILS_FRAGMENT_TAG = "details_fragment_tag";
     public static final String LOCATION_KEY = "settings_location_entry";
     public static final String MEASUREMENT_KEY = "settings_type_list";
-
-    public static final String POST_CODE_DEFAULT = "30339";
-    public static final String TYPE_MEASUREMENT_DEFAULT = "metric";
 }

@@ -76,7 +76,7 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        final String[] mainSettings = SharedPreferencesMagic.getMainSettings(sharedPreferences);
+        final String[] mainSettings = SharedPreferencesMagic.getMainSettings(sharedPreferences, getContext());
         new FetchWeatherTask(this).execute(mainSettings);
     }
 
@@ -89,7 +89,7 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
     public void onStart() {
         super.onStart();
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        final String[] preferenceOptions = SharedPreferencesMagic.getMainSettings(sharedPreferences);
+        final String[] preferenceOptions = SharedPreferencesMagic.getMainSettings(sharedPreferences, getContext());
         new FetchWeatherTask(this).execute(preferenceOptions);
     }
 
@@ -105,7 +105,7 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-            final String[] preferenceOptions = SharedPreferencesMagic.getMainSettings(sharedPreferences);
+            final String[] preferenceOptions = SharedPreferencesMagic.getMainSettings(sharedPreferences, getContext());
             new FetchWeatherTask(this).execute(preferenceOptions);
             return true;
         }

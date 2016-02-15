@@ -9,10 +9,11 @@
 
     <!-- Strings related to Settings -->
 
-    <string name="pref_default_display_name" translatable="false">30339</string>
-    <string name="pref_title_display_name" translatable="false">Location</string>
+    <string name="pref_default_location" translatable="false">30339</string>
+    <string name="pref_title_location_name" translatable="false">Location</string>
 
     <string name="pref_title_add_friends_to_messages" translatable="false">Unit type</string>
+    <string name="pref_default_unit_type">metric</string>
     <string-array name="pref_example_list_titles">
         <item>Metric</item>
         <item>Non-cool</item>

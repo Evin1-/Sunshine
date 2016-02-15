@@ -2,11 +2,11 @@ package com.loopcupcakes.udacity.sunshine.tasks;
 
 import android.os.AsyncTask;
 
+import com.loopcupcakes.udacity.sunshine.R;
 import com.loopcupcakes.udacity.sunshine.entities.Forecast;
 import com.loopcupcakes.udacity.sunshine.entities.Result;
 import com.loopcupcakes.udacity.sunshine.fragments.ForecastFragment;
 import com.loopcupcakes.udacity.sunshine.network.RetrofitHelper;
-import com.loopcupcakes.udacity.sunshine.utils.Constants;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,8 +30,12 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
     @Override
     protected String[] doInBackground(String... params) {
 
-        String postCode = (params != null && params.length > 0) ? params[0] : Constants.POST_CODE_DEFAULT;
-        String typeMeasurement = (params != null && params.length > 1) ? params[1] : Constants.TYPE_MEASUREMENT_DEFAULT;
+        String postCode = (params != null && params.length > 0)
+                ? params[0]
+                : mForecastFragment.getString(R.string.pref_default_location);
+        String typeMeasurement = (params != null && params.length > 1)
+                ? params[1]
+                : mForecastFragment.getString(R.string.pref_default_unit_type);
 
         RetrofitHelper retrofitHelper = new RetrofitHelper();
 
