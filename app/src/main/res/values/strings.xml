@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sunshine</string>
+    <string name="app_name" translatable="false">Sunshine</string>
     <string name="menu_settings_action">Settings</string>
     <string name="text_placeholder">Placeholder</string>
     <string name="menu_refresh_action">Refresh</string>
@@ -9,10 +9,10 @@
 
     <!-- Strings related to Settings -->
 
-    <string name="pref_default_display_name">30339</string>
-    <string name="pref_title_display_name">Location</string>
+    <string name="pref_default_display_name" translatable="false">30339</string>
+    <string name="pref_title_display_name" translatable="false">Location</string>
 
-    <string name="pref_title_add_friends_to_messages">Unit type</string>
+    <string name="pref_title_add_friends_to_messages" translatable="false">Unit type</string>
     <string-array name="pref_example_list_titles">
         <item>Metric</item>
         <item>Non-cool</item>
