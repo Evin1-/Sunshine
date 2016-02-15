@@ -9,6 +9,8 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivityTAG_";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO: 2/14/16 Settings validation
