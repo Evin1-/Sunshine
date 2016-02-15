@@ -18,7 +18,7 @@
         <item>Non-cool</item>
     </string-array>
     <string-array name="pref_example_list_values">
-        <item>Metric</item>
-        <item>Imperial</item>
+        <item>metric</item>
+        <item>imperial</item>
     </string-array>
 </resources>

@@ -6,8 +6,6 @@ import com.loopcupcakes.udacity.sunshine.entities.Result;
 import com.loopcupcakes.udacity.sunshine.utils.Constants;
 import com.loopcupcakes.udacity.sunshine.utils.Keys;
 
-import java.io.IOException;
-
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
