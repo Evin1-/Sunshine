@@ -29,7 +29,7 @@ import java.util.Arrays;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ForecastFragment extends Fragment{
+public class ForecastFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     private static final String TAG = "MainFragmentTAG_";
     private ArrayAdapter<String> mArrayAdapter;
@@ -68,13 +68,26 @@ public class ForecastFragment extends Fragment{
             }
         });
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
         return rootView;
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        final String[] mainSettings = SharedPreferencesMagic.getMainSettings(sharedPreferences);
+        new FetchWeatherTask(this).execute(mainSettings);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         final String[] preferenceOptions = SharedPreferencesMagic.getMainSettings(sharedPreferences);
         new FetchWeatherTask(this).execute(preferenceOptions);

@@ -22,7 +22,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
-            Log.d(TAG, "onPreferenceChange: " + stringValue);
 
             if (preference instanceof ListPreference) {
                 ListPreference listPreference = (ListPreference) preference;
