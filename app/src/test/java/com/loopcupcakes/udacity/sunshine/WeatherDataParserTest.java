@@ -7,6 +7,7 @@ package com.loopcupcakes.udacity.sunshine;
 import com.loopcupcakes.udacity.sunshine.utils.JsonParser;
 
 import junit.framework.TestCase;
+
 import org.json.JSONException;
 
 

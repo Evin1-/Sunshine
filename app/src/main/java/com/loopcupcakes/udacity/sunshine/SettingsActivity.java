@@ -9,7 +9,6 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.loopcupcakes.udacity.sunshine.appcompat.AppCompatPreferenceActivity;
