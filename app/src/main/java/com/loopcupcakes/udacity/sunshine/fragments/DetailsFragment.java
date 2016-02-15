@@ -3,7 +3,8 @@ package com.loopcupcakes.udacity.sunshine.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +23,7 @@ import com.loopcupcakes.udacity.sunshine.utils.Constants;
 public class DetailsFragment extends Fragment {
 
     private static final String TAG = "DetailsFragmentTAG_";
+    ShareActionProvider mShareActionProvider;
 
     public static DetailsFragment newInstance(String forecast) {
 
@@ -46,6 +48,17 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_details, menu);
+
+        MenuItem shareItem = menu.findItem(R.id.action_share_details);
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+
+        if (mShareActionProvider != null){
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getArguments().getString(Constants.FORECAST_BUNDLE_KEY) + " #SunshineApp");
+            shareIntent.setType("text/plain");
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
     }
 
     @Override
@@ -71,8 +84,6 @@ public class DetailsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         String forecast = getArguments().getString(Constants.FORECAST_BUNDLE_KEY);
-
-        Log.d(TAG, "onViewCreated: " + forecast);
 
         TextView textView = (TextView) view.findViewById(R.id.f_details_main_txt);
         textView.setText(forecast);

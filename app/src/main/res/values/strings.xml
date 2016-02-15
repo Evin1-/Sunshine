@@ -17,6 +17,7 @@
     <string name="pref_location_key">settings_location_entry</string>
     <string name="pref_type_key">settings_type_list</string>
     <string name="menu_view_map">View location</string>
+    <string name="menu_share_action">Share</string>
     <string-array name="pref_example_list_titles">
         <item>Metric</item>
         <item>Non-cool</item>
