@@ -21,7 +21,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.loopcupcakes.udacity.sunshine.database.WeatherContract.LocationEntry;
 import com.loopcupcakes.udacity.sunshine.database.WeatherContract.WeatherEntry;
-import com.loopcupcakes.udacity.sunshine.entities.Weather;
 
 /**
  * Manages a local database for weather data.
@@ -32,6 +31,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
 
     public static final String DATABASE_NAME = "weather.db";
+    private static final String TAG = "WeatherDbHelperTAG_";
 
     public WeatherDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -75,7 +75,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 LocationEntry.COLUMN_LOCATION_SETTING + " TEXT UNIQUE NOT NULL, " +
                 LocationEntry.COLUMN_CITY_NAME + " TEXT NOT NULL, " +
                 LocationEntry.COLUMN_COORD_LAT + " REAL NOT NULL, " +
-                LocationEntry.COLUMN_COORD_LONG + "REAL NOT NULL" +
+                LocationEntry.COLUMN_COORD_LONG + " REAL NOT NULL " +
                 ");";
 
         sqLiteDatabase.execSQL(SQL_CREATE_LOCATION_TABLE);

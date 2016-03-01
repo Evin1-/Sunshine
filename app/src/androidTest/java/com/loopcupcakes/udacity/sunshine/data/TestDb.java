@@ -16,6 +16,7 @@ package com.loopcupcakes.udacity.sunshine.data;
  * limitations under the License.
  */
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
@@ -27,7 +28,7 @@ import java.util.HashSet;
 
 public class TestDb extends AndroidTestCase {
 
-    public static final String LOG_TAG = TestDb.class.getSimpleName();
+    public static final String TAG = TestDb.class.getSimpleName() + "TAG_";
 
     // Since we want each test to start with a clean slate
     void deleteTheDatabase() {
@@ -115,21 +116,35 @@ public class TestDb extends AndroidTestCase {
     */
     public void testLocationTable() {
         // First step: Get reference to writable database
+        SQLiteDatabase sqLiteDatabase = new WeatherDbHelper(this.mContext).getWritableDatabase();
+        assertEquals(true, sqLiteDatabase.isOpen());
 
         // Create ContentValues of what you want to insert
         // (you can use the createNorthPoleLocationValues if you wish)
+        ContentValues contentValues = TestUtilities.createNorthPoleLocationValues();
 
         // Insert ContentValues into database and get a row ID back
 
+        long rowId = sqLiteDatabase.insert(WeatherContract.LocationEntry.TABLE_NAME, null, contentValues);
+        assertTrue("rowId lower than 0. Failed insertion", rowId > 0);
+
         // Query the database and receive a Cursor back
 
+        Cursor cursor = sqLiteDatabase.query(WeatherContract.LocationEntry.TABLE_NAME, null, null, null, null, null, null);
+
         // Move the cursor to a valid database row
+
+        cursor.moveToFirst();
 
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
 
+        TestUtilities.validateCurrentRecord("Record not equal", cursor, contentValues);
+
         // Finally, close the cursor and database
+        sqLiteDatabase.close();
+        cursor.close();
 
     }
 
