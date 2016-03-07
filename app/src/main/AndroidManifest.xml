@@ -10,6 +10,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -21,6 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".DetailsActivity"
             android:label="@string/title_activity_details"
@@ -30,6 +32,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.loopcupcakes.udacity.sunshine.MainActivity" />
         </activity>
+
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -38,6 +41,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.loopcupcakes.udacity.sunshine.MainActivity" />
         </activity>
+
+        <provider
+            android:name=".provider.WeatherProvider"
+            android:authorities="com.loopcupcakes.udacity.sunshine.authority"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 
 </manifest>
