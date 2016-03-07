@@ -1,5 +1,6 @@
 package com.loopcupcakes.udacity.sunshine.tasks;
 
+import android.content.ContentValues;
 import android.os.AsyncTask;
 
 import com.loopcupcakes.udacity.sunshine.R;
@@ -10,6 +11,7 @@ import com.loopcupcakes.udacity.sunshine.network.RetrofitHelper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -41,16 +43,42 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         Result result = retrofitHelper.getForecast(postCode, typeMeasurement);
 
-        return resultToString(result);
+        List<Forecast> forecastList = (result != null) ? result.getForecast() :  null;
+
+        ArrayList<ContentValues> valuesArrayList = createContentValues(forecastList);
+
+        return resultToString(forecastList);
     }
 
-    private String[] resultToString(Result result) {
+    private ArrayList<ContentValues> createContentValues(List<Forecast> forecastList) {
+        ArrayList<ContentValues> forecastValues = new ArrayList<>();
 
-        if (result == null){
-            return null;
+        for (Forecast forecast : forecastList){
+            forecastValues.add(parseContentForecast(forecast));
         }
 
-        final List<Forecast> forecastList = result.getForecast();
+        return forecastValues;
+    }
+
+    private ContentValues parseContentForecast(Forecast forecast) {
+
+        ContentValues weatherValues = new ContentValues();
+
+//        weatherValues.put(WeatherEntry.COLUMN_LOC_KEY, forecast.getLo);
+//        weatherValues.put(WeatherEntry.COLUMN_DATE, dateTime);
+//        weatherValues.put(WeatherEntry.COLUMN_HUMIDITY, humidity);
+//        weatherValues.put(WeatherEntry.COLUMN_PRESSURE, pressure);
+//        weatherValues.put(WeatherEntry.COLUMN_WIND_SPEED, windSpeed);
+//        weatherValues.put(WeatherEntry.COLUMN_DEGREES, windDirection);
+//        weatherValues.put(WeatherEntry.COLUMN_MAX_TEMP, high);
+//        weatherValues.put(WeatherEntry.COLUMN_MIN_TEMP, low);
+//        weatherValues.put(WeatherEntry.COLUMN_SHORT_DESC, description);
+//        weatherValues.put(WeatherEntry.COLUMN_WEATHER_ID, weatherId);
+
+        return weatherValues;
+    }
+
+    private String[] resultToString(List<Forecast> forecastList) {
         if (forecastList == null) {
             return null;
         }
