@@ -156,7 +156,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         if (cursor != null) {
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
-                locationId = Integer.parseInt(cursor.getString(cursor.getColumnIndex(WeatherContract.LocationEntry._ID)));
+                locationId = cursor.getInt(cursor.getColumnIndex(WeatherContract.LocationEntry._ID));
                 cursor.close();
             } else {
                 locationId = insertLocation(locationSetting, cityName, lat, lon);
