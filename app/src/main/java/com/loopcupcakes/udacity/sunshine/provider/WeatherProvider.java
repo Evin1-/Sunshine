@@ -132,7 +132,8 @@ public class WeatherProvider extends ContentProvider {
                 null,
                 null,
                 sortOrder
-        );    }
+        );
+    }
 
     public static UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -170,30 +171,24 @@ public class WeatherProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        // Here's the switch statement that, given a URI, will determine what kind of request it is,
-        // and query the database accordingly.
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             // "weather/*/*"
-            case WEATHER_WITH_LOCATION_AND_DATE: {
+            case WEATHER_WITH_LOCATION_AND_DATE:
                 retCursor = getWeatherByLocationSettingAndDate(uri, projection, sortOrder);
                 break;
-            }
             // "weather/*"
-            case WEATHER_WITH_LOCATION: {
+            case WEATHER_WITH_LOCATION:
                 retCursor = getWeatherByLocationSetting(uri, projection, sortOrder);
                 break;
-            }
             // "weather"
-            case WEATHER: {
+            case WEATHER:
                 retCursor = getWeather(projection, selection, selectionArgs, sortOrder);
                 break;
-            }
             // "location"
-            case LOCATION: {
+            case LOCATION:
                 retCursor = getLocation(projection, selection, selectionArgs, sortOrder);
                 break;
-            }
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -209,22 +204,34 @@ public class WeatherProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
+        long resultId;
         Uri returnUri;
 
         switch (match) {
-            case WEATHER: {
+            case WEATHER:
                 normalizeDate(values);
-                long _id = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, values);
-                if (_id > 0)
-                    returnUri = WeatherContract.WeatherEntry.buildWeatherUri(_id);
-                else
+                resultId = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, values);
+                if (resultId > 0) {
+                    returnUri = WeatherContract.WeatherEntry.buildWeatherUri(resultId);
+                } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
                 break;
-            }
+            case LOCATION:
+                resultId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, values);
+                if (resultId > 0) {
+                    returnUri = WeatherContract.LocationEntry.buildLocationUri(resultId);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+                throw new UnsupportedOperationException ("Unknown uri: " + uri);
         }
+
         getContext().getContentResolver().notifyChange(uri, null);
+        db.close();
+
         return returnUri;
     }
 
