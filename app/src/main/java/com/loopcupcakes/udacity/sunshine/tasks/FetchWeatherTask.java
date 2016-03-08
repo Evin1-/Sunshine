@@ -1,9 +1,15 @@
 package com.loopcupcakes.udacity.sunshine.tasks;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.loopcupcakes.udacity.sunshine.R;
+import com.loopcupcakes.udacity.sunshine.database.WeatherContract;
+import com.loopcupcakes.udacity.sunshine.entities.City;
+import com.loopcupcakes.udacity.sunshine.entities.Coord;
 import com.loopcupcakes.udacity.sunshine.entities.Forecast;
 import com.loopcupcakes.udacity.sunshine.entities.Result;
 import com.loopcupcakes.udacity.sunshine.fragments.ForecastFragment;
@@ -43,17 +49,34 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         Result result = retrofitHelper.getForecast(postCode, typeMeasurement);
 
-        List<Forecast> forecastList = (result != null) ? result.getForecast() :  null;
+        int locationId = getLocationId(postCode, result);
+
+        List<Forecast> forecastList = (result != null) ? result.getForecast() : null;
 
         ArrayList<ContentValues> valuesArrayList = createContentValues(forecastList);
 
+
         return resultToString(forecastList);
+    }
+
+    private int getLocationId(String postCode, Result result) {
+        int locationId = -1;
+
+        if (result != null) {
+            City city = result.getCity();
+            if (city != null) {
+                Coord coord = city.getCoord();
+                locationId = addLocation(postCode, city.getName(), coord.getLat(), coord.getLon());
+            }
+        }
+
+        return locationId;
     }
 
     private ArrayList<ContentValues> createContentValues(List<Forecast> forecastList) {
         ArrayList<ContentValues> forecastValues = new ArrayList<>();
 
-        for (Forecast forecast : forecastList){
+        for (Forecast forecast : forecastList) {
             forecastValues.add(parseContentForecast(forecast));
         }
 
@@ -111,6 +134,55 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         DateFormat simpleDateFormat = new SimpleDateFormat("c, MMM d", Locale.US);
         Date netDate = (new Date(time * 1000));
         return simpleDateFormat.format(netDate);
+    }
+
+    int addLocation(String locationSetting, String cityName, double lat, double lon) {
+        if (mForecastFragment == null) {
+            return -1;
+        }
+
+        int locationId = -1;
+
+        Uri locationUri = WeatherContract.LocationEntry.CONTENT_URI;
+
+        Cursor cursor = getContentResolver().query(
+                locationUri,
+                new String[]{WeatherContract.LocationEntry._ID},
+                WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
+                new String[]{locationSetting},
+                null
+        );
+
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                locationId = Integer.parseInt(cursor.getString(cursor.getColumnIndex(WeatherContract.LocationEntry._ID)));
+                cursor.close();
+            } else {
+                locationId = insertLocation(locationSetting, cityName, lat, lon);
+            }
+        }
+
+        return locationId;
+    }
+
+    private int insertLocation(String locationSetting, String cityName, double lat, double lon) {
+        int locationId;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, cityName);
+        contentValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, locationSetting);
+        contentValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, lat);
+        contentValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, lon);
+
+        Uri createLocationUri = WeatherContract.LocationEntry.CONTENT_URI;
+        Uri insertedLocationUri = getContentResolver().insert(createLocationUri, contentValues);
+
+        locationId = Integer.parseInt(WeatherContract.LocationEntry.getLocationSettingFromUri(insertedLocationUri));
+        return locationId;
+    }
+
+    private ContentResolver getContentResolver() {
+        return mForecastFragment.getContext().getContentResolver();
     }
 
     @Override

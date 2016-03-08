@@ -8,6 +8,8 @@ import android.text.format.Time;
 
 public class WeatherContract {
 
+    private static final String TAG = "WeatherContractTAG_";
+
     public static final String CONTENT_AUTHORITY = "com.loopcupcakes.udacity.sunshine.authority";
 
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
@@ -40,6 +42,9 @@ public class WeatherContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+        public static String getLocationSettingFromUri(Uri createLocationUri) {
+            return createLocationUri.getPathSegments().get(1);
+        }
     }
 
     public static final class WeatherEntry implements BaseColumns {

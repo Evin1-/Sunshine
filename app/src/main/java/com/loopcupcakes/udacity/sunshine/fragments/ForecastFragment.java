@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,7 +31,7 @@ import java.util.Arrays;
  */
 public class ForecastFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
-    private static final String TAG = "MainFragmentTAG_";
+    private static final String TAG = "ForecastFragmentTAG_";
     private ArrayAdapter<String> mArrayAdapter;
     private ArrayList<String> mArrayList;
 
@@ -52,8 +51,6 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        Log.d(TAG, "onCreateView: " + savedInstanceState);
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
 
