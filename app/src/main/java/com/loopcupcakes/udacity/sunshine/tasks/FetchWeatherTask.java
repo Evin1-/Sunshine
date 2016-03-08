@@ -8,10 +8,12 @@ import android.os.AsyncTask;
 
 import com.loopcupcakes.udacity.sunshine.R;
 import com.loopcupcakes.udacity.sunshine.database.WeatherContract;
+import com.loopcupcakes.udacity.sunshine.database.WeatherContract.WeatherEntry;
 import com.loopcupcakes.udacity.sunshine.entities.City;
 import com.loopcupcakes.udacity.sunshine.entities.Coord;
 import com.loopcupcakes.udacity.sunshine.entities.Forecast;
 import com.loopcupcakes.udacity.sunshine.entities.Result;
+import com.loopcupcakes.udacity.sunshine.entities.Weather;
 import com.loopcupcakes.udacity.sunshine.fragments.ForecastFragment;
 import com.loopcupcakes.udacity.sunshine.network.RetrofitHelper;
 
@@ -53,10 +55,16 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         List<Forecast> forecastList = (result != null) ? result.getForecast() : null;
 
-        ArrayList<ContentValues> valuesArrayList = createContentValues(forecastList);
+        ArrayList<ContentValues> valuesArrayList = createContentValues(forecastList, locationId);
+        insertInBulk(valuesArrayList);
 
 
         return resultToString(forecastList);
+    }
+
+    private int insertInBulk(ArrayList<ContentValues> valuesArrayList) {
+        Uri weatherUri = WeatherEntry.CONTENT_URI;
+        return getContentResolver().bulkInsert(weatherUri, valuesArrayList.toArray(new ContentValues[0]));
     }
 
     private int getLocationId(String postCode, Result result) {
@@ -73,30 +81,35 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         return locationId;
     }
 
-    private ArrayList<ContentValues> createContentValues(List<Forecast> forecastList) {
+    private ArrayList<ContentValues> createContentValues(List<Forecast> forecastList, int locationId) {
         ArrayList<ContentValues> forecastValues = new ArrayList<>();
 
         for (Forecast forecast : forecastList) {
-            forecastValues.add(parseContentForecast(forecast));
+            forecastValues.add(parseContentForecast(forecast, locationId));
         }
 
         return forecastValues;
     }
 
-    private ContentValues parseContentForecast(Forecast forecast) {
+    private ContentValues parseContentForecast(Forecast forecast, int locationId) {
 
         ContentValues weatherValues = new ContentValues();
 
-//        weatherValues.put(WeatherEntry.COLUMN_LOC_KEY, forecast.getLo);
-//        weatherValues.put(WeatherEntry.COLUMN_DATE, dateTime);
-//        weatherValues.put(WeatherEntry.COLUMN_HUMIDITY, humidity);
-//        weatherValues.put(WeatherEntry.COLUMN_PRESSURE, pressure);
-//        weatherValues.put(WeatherEntry.COLUMN_WIND_SPEED, windSpeed);
-//        weatherValues.put(WeatherEntry.COLUMN_DEGREES, windDirection);
-//        weatherValues.put(WeatherEntry.COLUMN_MAX_TEMP, high);
-//        weatherValues.put(WeatherEntry.COLUMN_MIN_TEMP, low);
-//        weatherValues.put(WeatherEntry.COLUMN_SHORT_DESC, description);
-//        weatherValues.put(WeatherEntry.COLUMN_WEATHER_ID, weatherId);
+        weatherValues.put(WeatherEntry.COLUMN_LOC_KEY, locationId);
+        weatherValues.put(WeatherEntry.COLUMN_DATE, forecast.getDt());
+        weatherValues.put(WeatherEntry.COLUMN_HUMIDITY, forecast.getHumidity());
+        weatherValues.put(WeatherEntry.COLUMN_PRESSURE, forecast.getPressure());
+        weatherValues.put(WeatherEntry.COLUMN_WIND_SPEED, forecast.getSpeed());
+        weatherValues.put(WeatherEntry.COLUMN_DEGREES, forecast.getDeg());
+        weatherValues.put(WeatherEntry.COLUMN_MAX_TEMP, forecast.getTemp().getMax());
+        weatherValues.put(WeatherEntry.COLUMN_MIN_TEMP, forecast.getTemp().getMin());
+
+        List<Weather> weatherList = forecast.getWeather();
+
+        if (weatherList.size() > 0) {
+            weatherValues.put(WeatherEntry.COLUMN_SHORT_DESC, weatherList.get(0).getMain());
+            weatherValues.put(WeatherEntry.COLUMN_WEATHER_ID, weatherList.get(0).getId());
+        }
 
         return weatherValues;
     }

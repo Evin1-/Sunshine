@@ -15,6 +15,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // TODO: 2/14/16 Settings validation
         // TODO: 2/14/16 Settings autocomplete
+        // TODO: 3/7/16 Normalize date
+        // TODO: 3/7/16 Normalize measurement type db
+        // TODO: 3/8/16 Fix normalize date in WeatherContract
+        // TODO: 3/8/16 Fix measurement type after first install
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
