@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,7 +31,6 @@ import com.loopcupcakes.udacity.sunshine.utils.SharedPreferencesMagic;
 import com.loopcupcakes.udacity.sunshine.utils.Utility;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -42,12 +40,12 @@ public class ForecastFragment extends Fragment
 
     private static final String TAG = "ForecastFragmentTAG_";
 
-    private static final int LOADER_ID = 10;
+    private static final int FORECAST_LOADER_ID = 10;
 
     private ForecastAdapter mForecastAdapter;
     private ArrayList<String> mArrayList;
 
-    private static final String[] FORECAST_COLUMNS = {
+    public static final String[] FORECAST_COLUMNS = {
             WeatherContract.WeatherEntry.TABLE_NAME + "." + WeatherContract.WeatherEntry._ID,
             WeatherContract.WeatherEntry.COLUMN_DATE,
             WeatherContract.WeatherEntry.COLUMN_SHORT_DESC,
@@ -132,7 +130,7 @@ public class ForecastFragment extends Fragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+        getActivity().getSupportLoaderManager().initLoader(FORECAST_LOADER_ID, null, this);
     }
 
     @Override
@@ -174,14 +172,6 @@ public class ForecastFragment extends Fragment
         intent.setData(geoLocation);
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivity(intent);
-        }
-    }
-
-    public void refreshAdapter(String[] resultArray) {
-        if (mArrayList != null && mForecastAdapter != null) {
-            mArrayList.clear();
-            mArrayList.addAll(new ArrayList<String>(Arrays.asList(resultArray)));
-            mForecastAdapter.notifyDataSetChanged();
         }
     }
 
