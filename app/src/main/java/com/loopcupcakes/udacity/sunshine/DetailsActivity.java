@@ -29,7 +29,7 @@ public class DetailsActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String forecast = getIntent().getStringExtra(Constants.FORECAST_BUNDLE_KEY);
+        String forecast = getIntent().getDataString();
         DetailsFragment detailsFragment = DetailsFragment.newInstance(forecast);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.a_details_frame, detailsFragment, Constants.DETAILS_FRAGMENT_TAG).commit();
