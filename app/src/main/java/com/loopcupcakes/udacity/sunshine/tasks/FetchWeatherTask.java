@@ -42,10 +42,10 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         String postCode = (params != null && params.length > 0)
                 ? params[0]
-                : mForecastFragment.getString(R.string.pref_default_location);
+                : mForecastFragment.getString(R.string.pref_location_default);
         String typeMeasurement = (params != null && params.length > 1)
                 ? params[1]
-                : mForecastFragment.getString(R.string.pref_default_unit_type);
+                : mForecastFragment.getString(R.string.pref_units_metric);
 
         RetrofitHelper retrofitHelper = new RetrofitHelper();
 

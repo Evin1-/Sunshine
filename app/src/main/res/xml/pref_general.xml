@@ -2,7 +2,7 @@
 
     <EditTextPreference
         android:capitalize="words"
-        android:defaultValue="@string/pref_default_location"
+        android:defaultValue="@string/pref_location_default"
         android:inputType="textCapWords"
         android:key="@string/pref_location_key"
         android:maxLines="1"
@@ -11,10 +11,10 @@
         android:title="@string/pref_title_location_name" />
 
     <ListPreference
-        android:defaultValue="@string/pref_default_unit_type"
+        android:defaultValue="@string/pref_units_metric"
         android:entries="@array/pref_example_list_titles"
         android:entryValues="@array/pref_example_list_values"
-        android:key="@string/pref_type_key"
+        android:key="@string/pref_units_key"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="@string/pref_title_add_friends_to_messages" />

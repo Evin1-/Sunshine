@@ -9,15 +9,18 @@
 
     <!-- Strings related to Settings -->
 
-    <string name="pref_default_location" translatable="false">30339</string>
+    <string name="pref_title_add_friends_to_messages" translatable="false">Unit type</string>
     <string name="pref_title_location_name" translatable="false">Location</string>
 
-    <string name="pref_title_add_friends_to_messages" translatable="false">Unit type</string>
-    <string name="pref_default_unit_type">metric</string>
     <string name="pref_location_key">settings_location_entry</string>
-    <string name="pref_type_key">settings_type_list</string>
+    <string name="pref_location_default" translatable="false">30339</string>
+
+    <string name="pref_units_key">settings_type_list</string>
+    <string name="pref_units_metric">metric</string>
+
     <string name="menu_view_map">View location</string>
     <string name="menu_share_action">Share</string>
+
     <string-array name="pref_example_list_titles">
         <item>Metric</item>
         <item>Non-cool</item>

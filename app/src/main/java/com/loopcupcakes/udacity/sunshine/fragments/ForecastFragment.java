@@ -100,7 +100,7 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
 
         if (id == R.id.action_map) {
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-            String locationQuery = sharedPreferences.getString(Constants.LOCATION_KEY, getString(R.string.pref_default_location));
+            String locationQuery = sharedPreferences.getString(Constants.LOCATION_KEY, getString(R.string.pref_location_default));
             showMap(Uri.parse("geo:0,0").buildUpon().appendQueryParameter("q", locationQuery).build());
         }
         if (id == R.id.action_refresh) {
