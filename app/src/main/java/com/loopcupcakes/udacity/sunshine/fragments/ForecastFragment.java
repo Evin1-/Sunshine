@@ -2,26 +2,29 @@ package com.loopcupcakes.udacity.sunshine.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.loopcupcakes.udacity.sunshine.DetailsActivity;
 import com.loopcupcakes.udacity.sunshine.R;
 import com.loopcupcakes.udacity.sunshine.SettingsActivity;
+import com.loopcupcakes.udacity.sunshine.adapters.ForecastAdapter;
+import com.loopcupcakes.udacity.sunshine.database.WeatherContract;
 import com.loopcupcakes.udacity.sunshine.tasks.FetchWeatherTask;
 import com.loopcupcakes.udacity.sunshine.utils.Constants;
 import com.loopcupcakes.udacity.sunshine.utils.SharedPreferencesMagic;
+import com.loopcupcakes.udacity.sunshine.utils.Utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,10 +32,10 @@ import java.util.Arrays;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ForecastFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class ForecastFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "ForecastFragmentTAG_";
-    private ArrayAdapter<String> mArrayAdapter;
+    private ForecastAdapter mForecastAdapter;
     private ArrayList<String> mArrayList;
 
     public ForecastFragment() {
@@ -44,7 +47,7 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mArrayList = new ArrayList<>();
-        mArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_text, mArrayList);
+//        mForecastAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_text, mArrayList);
     }
 
     @Override
@@ -52,19 +55,31 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
+        String locationSetting = Utility.getPreferredLocation(getActivity());
+
+        // Sort order:  Ascending, by date.
+        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+                locationSetting, System.currentTimeMillis());
+
+        Cursor cursor = getActivity().getContentResolver().query(weatherForLocationUri,
+                null, null, null, sortOrder);
+
+        mForecastAdapter = new ForecastAdapter(getActivity(), cursor, 0);
+
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
 
-        listView.setAdapter(mArrayAdapter);
+        listView.setAdapter(mForecastAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String forecast = mArrayAdapter.getItem(position);
-                Intent intent = new Intent(getContext(), DetailsActivity.class);
-                intent.putExtra(Constants.FORECAST_BUNDLE_KEY, forecast);
-                startActivity(intent);
-            }
-        });
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                String forecast = mForecastAdapter.getItem(position);
+//                Intent intent = new Intent(getContext(), DetailsActivity.class);
+//                intent.putExtra(Constants.FORECAST_BUNDLE_KEY, forecast);
+//                startActivity(intent);
+//            }
+//        });
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -131,11 +146,11 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
         }
     }
 
-    public void refreshAdapter(String[] resultArray){
-        if (mArrayList != null && mArrayAdapter != null){
+    public void refreshAdapter(String[] resultArray) {
+        if (mArrayList != null && mForecastAdapter != null) {
             mArrayList.clear();
             mArrayList.addAll(new ArrayList<String>(Arrays.asList(resultArray)));
-            mArrayAdapter.notifyDataSetChanged();
+            mForecastAdapter.notifyDataSetChanged();
         }
     }
 }

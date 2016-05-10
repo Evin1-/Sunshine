@@ -197,15 +197,4 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
     private ContentResolver getContentResolver() {
         return mForecastFragment.getContext().getContentResolver();
     }
-
-    @Override
-    protected void onPostExecute(String[] forecastArray) {
-        super.onPostExecute(forecastArray);
-
-        if (forecastArray == null || mForecastFragment == null) {
-            return;
-        }
-
-        mForecastFragment.refreshAdapter(forecastArray);
-    }
 }
