@@ -6,7 +6,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,9 +35,13 @@ import java.util.Arrays;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ForecastFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class ForecastFragment extends Fragment
+        implements SharedPreferences.OnSharedPreferenceChangeListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = "ForecastFragmentTAG_";
+
+    private static final int LOADER_ID = 10;
+
     private ForecastAdapter mForecastAdapter;
     private ArrayList<String> mArrayList;
 
@@ -53,17 +62,22 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        String locationSetting = Utility.getPreferredLocation(getActivity());
+//        String locationSetting = Utility.getPreferredLocation(getActivity());
+//
+//        // Sort order:  Ascending, by date.
+//        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+////        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+////                locationSetting, System.currentTimeMillis());
+//        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocation(
+//                locationSetting);
+//
+//        Cursor cursor = getActivity().getContentResolver().query(weatherForLocationUri,
+//                null, null, null, sortOrder);
+//
+//        Log.d(TAG, "onCreateView: " + cursor.getCount());
+//        Log.d(TAG, "onCreateView: " + weatherForLocationUri);
 
-        // Sort order:  Ascending, by date.
-        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
-        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
-                locationSetting, System.currentTimeMillis());
-
-        Cursor cursor = getActivity().getContentResolver().query(weatherForLocationUri,
-                null, null, null, sortOrder);
-
-        mForecastAdapter = new ForecastAdapter(getActivity(), cursor, 0);
+        mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
 
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
 
@@ -100,6 +114,12 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
         super.onStart();
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         refreshWeather(sharedPreferences);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
@@ -150,5 +170,30 @@ public class ForecastFragment extends Fragment implements SharedPreferences.OnSh
             mArrayList.addAll(new ArrayList<String>(Arrays.asList(resultArray)));
             mForecastAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String locationSetting = Utility.getPreferredLocation(getActivity());
+        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocation(
+                locationSetting);
+
+        return new CursorLoader(getActivity().getApplicationContext(),
+                weatherForLocationUri,
+                null,
+                null,
+                null,
+                sortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mForecastAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mForecastAdapter.swapCursor(null);
     }
 }
