@@ -3,7 +3,6 @@ package com.loopcupcakes.udacity.sunshine.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.loopcupcakes.udacity.sunshine.R;
 

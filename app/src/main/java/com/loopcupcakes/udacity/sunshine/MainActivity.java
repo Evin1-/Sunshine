@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         // TODO: 3/8/16 Fix measurement type after first install
         // TODO: 5/10/16 Fix dates formatting after Loader
         // TODO: 5/10/16 Check the weatherForLocationUri
+        // TODO: 5/10/16 Make the ShareActionProvider modular in the DetailsFragment
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

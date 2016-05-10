@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.loopcupcakes.udacity.sunshine.R;
-import com.loopcupcakes.udacity.sunshine.database.WeatherContract;
 import com.loopcupcakes.udacity.sunshine.fragments.ForecastFragment;
 import com.loopcupcakes.udacity.sunshine.utils.Utility;
 
