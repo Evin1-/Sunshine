@@ -3,16 +3,21 @@ package com.loopcupcakes.udacity.sunshine.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.loopcupcakes.udacity.sunshine.R;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by evin on 5/10/16.
  */
 public class Utility {
+    private static final String TAG = "UtilityTAG_";
+
     public static String getPreferredLocation(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_location_key),
@@ -37,7 +42,8 @@ public class Utility {
     }
 
     public static String formatDate(long dateInMillis) {
-        Date date = new Date(dateInMillis);
-        return DateFormat.getDateInstance().format(date);
+        DateFormat simpleDateFormat = new SimpleDateFormat("c, MMM d", Locale.US);
+        Date netDate = (new Date(dateInMillis * 1000));
+        return simpleDateFormat.format(netDate);
     }
 }

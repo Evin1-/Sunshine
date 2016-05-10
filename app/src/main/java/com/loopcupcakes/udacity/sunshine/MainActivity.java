@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         // TODO: 3/7/16 Normalize measurement type db
         // TODO: 3/8/16 Fix normalize date in WeatherContract
         // TODO: 3/8/16 Fix measurement type after first install
+        // TODO: 5/10/16 Fix dates formatting after Loader
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
